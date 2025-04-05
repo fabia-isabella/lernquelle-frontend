@@ -21,7 +21,7 @@ export default function Page() {
 		const userId = 1; // TODO: replace with dynamic user ID from auth
 		const fetchGoals = async () => {
 			try {
-				const res = await fetch(`http://127.0.0.1:8000/api/goals/${userId}`);
+				const res = await fetch(`http://127.0.0.1:8000/goals/${userId}`);
 				const data: Goal[] = await res.json();
 				setGoals(data);
 			} catch (err) {

@@ -29,7 +29,7 @@ export default function CurrentGoalView() {
 
 		const fetchGoals = async () => {
 			try {
-				const res = await fetch(`http://127.0.0.1:8000/api/goals/${userId}`);
+				const res = await fetch(`http://127.0.0.1:8000/goals/${userId}`);
 				const data: Goal[] = await res.json();
 
 				const now = new Date();
