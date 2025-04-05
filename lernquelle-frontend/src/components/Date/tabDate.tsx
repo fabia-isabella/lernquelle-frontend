@@ -1,37 +1,40 @@
 import React from 'react';
 import Table from './Table';
+import {Box, Card, CardContent, Typography} from '@mui/material';
 
 const App: React.FC = () => {
+    //TODO add api endpoint calls
     const columns = [
-        { path: "Vorname", name: "Vorname" },
-        { path: "Nachname", name: "Nachname" },
-        { path: "Date", name: "Date" },
-        { path: "DueTo", name: "Due to" },
-        { path: "Description", name: "Description" },
+        { path: "title", name: "Titel"},
+        { path: "Description", name: "Beschreibung" },
+        { path: "DueTo", name: "Fällig am" },
     ];
 
     const data = [
         {
-            Vorname: "Friedrich",
-            Nachname: "Dürenmatt",
-            Date: "2025-04-10",
+            title: "Austausch Ausbildungscoach",
             DueTo: "2025-04-12",
-            Description: "Code Review",
+            Description: "Besprechung Lernziele Ausbildung",
         },
         {
-            Vorname: "Michael",
-            Nachname: "Jackson",
-            Date: "2025-04-15",
+            title: "Blocker Reflexion",
             DueTo: "2025-04-16",
-            Description: "Vortrag lernen für IPA",
+            Description: "Reflexion Informatikprüfung",
         },
     ];
 
     return (
-        <div className="page-container">
-            <h2>Termine</h2>
-            <Table id="Vorname" columns={columns} data={data} />
-        </div>
+            <Card sx={{width: '95%', borderTop: '1px solid black',
+                borderLeft: '1px solid black',
+                borderBottom: '5px solid black',
+                borderRight: '5px solid black', padding: '0.25rem' }}>
+                <Typography variant='h6'>Termine</Typography>
+                <CardContent>
+                    <Box>
+                        <Typography></Typography>
+                    </Box>
+                </CardContent>
+            </Card>
     );
 };
 

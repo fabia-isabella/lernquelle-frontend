@@ -1,11 +1,13 @@
-import styles from "./page.module.css";
 import Dashboard from "@/components/dashboard/dashboard";
-import NavigationMenu from "@/components/nav-bar/navigation-menu";
+import HomePageLernende from "@/components/profil/HomePageLernende";
 
 export default function Home() {
   return (
-      <><NavigationMenu></NavigationMenu>
-        <div className="page-container"><Dashboard></Dashboard></div>
+      <>
+        <div className="page-container">
+            <HomePageLernende></HomePageLernende>
+            <Dashboard></Dashboard>
+        </div>
       </>
   );
 }

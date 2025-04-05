@@ -18,14 +18,10 @@ html, body {
   font-family: "Silkscreen", sans-serif;
   background: var(--background);
   color: var(--foreground);
-  border: 10px solid;
-  border-image: repeating-linear-gradient(
-          45deg,
-          #000 0%,
-          #000 5px,
-          transparent 5px,
-          transparent 10px
-  ) 10;
+}
+
+p {
+  font-family: 'Nunito', sans-serif;
 }
 
 .page-container {
