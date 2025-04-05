@@ -1,92 +1,49 @@
 'use client';
-import { Box, Button, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+
+import { IconButton, Box, Typography } from '@mui/material';
+import { useRouter, usePathname } from 'next/navigation';
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function NavigationMenu() {
-	const [open, setOpen] = React.useState(false);
 	const router = useRouter();
+	const pathname = usePathname();
 
-	const toggleDrawer = (newOpen: boolean) => () => {
-		setOpen(newOpen);
+	const handleClick = () => {
+		router.push('/');
 	};
 
-	const menuItems = [
-		{ label: 'Übersicht', path: '/'},
-		{ label: 'Ziele', path: '/ziele' },
-		{ label: 'Noten', path: '/noten' }
-	];
-
-	const DrawerList = (
-		<Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-			<List>
-				{menuItems.map((item) => (
-					<ListItem key={item.label} disablePadding>
-						<ListItemButton onClick={() => router.push(item.path)}> {/* Navigate to the path */}
-							<ListItemText primary={item.label} />
-						</ListItemButton>
-					</ListItem>
-				))}
-			</List>
-		</Box>
-	);
+	const isHome = pathname === '/';
 
 	return (
-		<div>
-			<Button
-				onClick={toggleDrawer(true)}
-				sx={{
-					position: 'relative',
-					width: '40px',
-					height: '30px',
-					backgroundColor: 'transparent',
-					border: 'none',
-					marginTop: '0.5rem',
-				}}
-			>
-				<Box
-					sx={{
-						position: 'absolute',
-						left: '22.22%',
-						right: '22.22%',
-						top: '22.22%',
-						bottom: '66.67%',
-						background: '#343341',
-						height: '4px',
-						borderRadius: '2px',
-					}}
-				></Box>
-
-				<Box
-					sx={{
-						position: 'absolute',
-						left: '22.22%',
-						right: '22.22%',
-						top: '44.44%',
-						bottom: '44.44%',
-						background: '#343341',
-						height: '4px',
-						borderRadius: '2px',
-					}}
-				></Box>
-
-				<Box
-					sx={{
-						position: 'absolute',
-						left: '22.22%',
-						right: '22.22%',
-						top: '66.67%',
-						bottom: '22.22%',
-						background: '#343341',
-						height: '4px',
-						borderRadius: '2px',
-					}}
-				></Box>
-			</Button>
-
-			<Drawer open={open} onClose={toggleDrawer(false)}>
-				{DrawerList}
-			</Drawer>
-		</div>
+		<Box
+			onClick={handleClick}
+			sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', margin: '0.5rem' }}
+			aria-label="Zur Übersicht"
+		>
+			<IconButton sx={{ padding: 0 }}>
+				<svg
+					width="36"
+					height="36"
+					viewBox="0 0 36 36"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path d="M16 4H20V8H16V4Z" fill="#F92F3C" />
+					<path d="M12 8H16V12H12V8Z" fill="#F92F3C" />
+					<path d="M20 8H24V12H20V8Z" fill="#F92F3C" />
+					<path d="M8 12H12V16H8V12Z" fill="#F92F3C" />
+					<path d="M24 12H28V16H24V12Z" fill="#F92F3C" />
+					<path d="M4 16H8V20H4V16Z" fill="#F92F3C" />
+					<path d="M28 16H32V20H28V16Z" fill="#F92F3C" />
+					<path d="M16 8H20V12H24V16H28V32H24V20H12V32H8V16H12V12H16V8Z" fill="#FFFBD4" />
+					<path d="M12 20H24V32H12V20Z" fill="#D38100" />
+				</svg>
+			</IconButton>
+			{!isHome && (
+				<Typography sx={{ marginLeft: '0.5rem', fontFamily: 'Silkscreen' }}>
+					Zur Übersicht
+				</Typography>
+			)}
+		</Box>
 	);
 }

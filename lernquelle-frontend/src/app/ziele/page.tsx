@@ -1,7 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
+// @ts-ignore
 import {
 	Box,
+	Card,
+	CardContent,
 	Typography,
 } from '@mui/material';
 

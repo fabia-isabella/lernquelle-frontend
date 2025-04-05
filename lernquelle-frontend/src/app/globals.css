@@ -20,6 +20,10 @@ html, body {
   color: var(--foreground);
 }
 
+p {
+  font-family: 'Nunito', sans-serif;
+}
+
 .page-container {
   min-height: 100vh;
   width: 100%;

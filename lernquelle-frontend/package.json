@@ -12,7 +12,6 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.0.1",
-    "d3": "^7.9.0",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.2",
     "next": "15.2.4",
@@ -22,7 +21,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/d3": "^7.4.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

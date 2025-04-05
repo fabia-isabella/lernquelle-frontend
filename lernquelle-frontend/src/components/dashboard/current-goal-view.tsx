@@ -1,7 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import {
+	Button,
 	Card,
+	CardActions,
 	CardContent,
 	Typography,
 	Box,
@@ -53,6 +55,7 @@ export default function CurrentGoalView() {
 				console.error('Failed to fetch goals:', err);
 			}
 		};
+
 		fetchGoals();
 	}, []);
 
@@ -88,10 +91,9 @@ export default function CurrentGoalView() {
 						borderBottom: '5px solid black',
 						borderRight: '5px solid black',
 						mb: 2,
-						cursor: 'pointer', // Add pointer cursor to show it's clickable
+						cursor: 'pointer',
 					}}
-					onClick={() => handleCardClick()} // Use the goal's ID to navigate to the detail page
-				>
+					onClick={() => handleCardClick()} >
 					<CardContent>
 						<Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
 							Individuelle Ziele
