@@ -11,11 +11,12 @@ import {
 import { useRouter } from 'next/navigation';
 
 type Goal = {
+	goal_id: string;
 	description: string;
-	dueDate: string;
-	creationDate: string;
+	due_date: string;
+	creation_date: string;
 	grading: string;
-	type: string;
+	goal_type: string;
 };
 
 export default function CurrentGoalView() {
@@ -33,16 +34,27 @@ export default function CurrentGoalView() {
 				const data: Goal[] = await res.json();
 
 				const now = new Date();
+
 				const futureGoals = data
-					.filter(goal => new Date(goal.dueDate) > now)
-					.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+					.filter(goal => {
+						const dueDateStr = goal.due_date.split(',')[0];
+						const [day, month, year] = dueDateStr.split('/');
+
+						const dueDate = new Date(`${year}-${month}-${day}`);
+
+						return dueDate > now;
+					})
+					.sort((a, b) => {
+						const dueDateA = new Date(`${a.due_date.split(',')[0].split('/')[2]}-${a.due_date.split(',')[0].split('/')[1]}-${a.due_date.split(',')[0].split('/')[0]}`);
+						const dueDateB = new Date(`${b.due_date.split(',')[0].split('/')[2]}-${b.due_date.split(',')[0].split('/')[1]}-${b.due_date.split(',')[0].split('/')[0]}`);
+						return dueDateA.getTime() - dueDateB.getTime();
+					});
 
 				setGoals(futureGoals);
 			} catch (err) {
 				console.error('Failed to fetch goals:', err);
 			}
 		};
-
 		fetchGoals();
 	}, []);
 
@@ -85,10 +97,10 @@ export default function CurrentGoalView() {
 									{goal.description}
 								</Typography>
 								<Typography variant="body2" color="text.secondary">
-									Fälligkeitsdatum: {new Date(goal.dueDate).toLocaleDateString()}
+									Fälligkeitsdatum: {goal.due_date}
 								</Typography>
 								<Typography variant="body2" color="text.secondary">
-									Typ: {goal.type}
+									Typ: {goal.goal_type}
 								</Typography>
 							</Box>
 						))

@@ -1,21 +1,29 @@
 'use client';
-import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Box, Button, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function NavigationMenu() {
 	const [open, setOpen] = React.useState(false);
+	const router = useRouter();
 
 	const toggleDrawer = (newOpen: boolean) => () => {
 		setOpen(newOpen);
 	};
 
+	const menuItems = [
+		{ label: 'Übersicht', path: '/'},
+		{ label: 'Ziele', path: '/ziele' },
+		{ label: 'Noten', path: '/noten' }
+	];
+
 	const DrawerList = (
 		<Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
 			<List>
-				{['Ziele', 'Noten'].map((text, index) => (
-					<ListItem key={text} disablePadding>
-						<ListItemButton>
-							<ListItemText primary={text} />
+				{menuItems.map((item) => (
+					<ListItem key={item.label} disablePadding>
+						<ListItemButton onClick={() => router.push(item.path)}> {/* Navigate to the path */}
+							<ListItemText primary={item.label} />
 						</ListItemButton>
 					</ListItem>
 				))}
@@ -25,7 +33,17 @@ export default function NavigationMenu() {
 
 	return (
 		<div>
-			<Button onClick={toggleDrawer(true)} sx={{ position: 'relative', width: '40px', height: '30px', backgroundColor: 'transparent', border: 'none', marginTop: '0.5rem' }}>
+			<Button
+				onClick={toggleDrawer(true)}
+				sx={{
+					position: 'relative',
+					width: '40px',
+					height: '30px',
+					backgroundColor: 'transparent',
+					border: 'none',
+					marginTop: '0.5rem',
+				}}
+			>
 				<Box
 					sx={{
 						position: 'absolute',
