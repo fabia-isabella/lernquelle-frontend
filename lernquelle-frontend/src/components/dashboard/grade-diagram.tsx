@@ -1,23 +1,33 @@
 'use client';
 import { useEffect, useState } from 'react';
-import * as d3 from 'd3';
+import ReactECharts from 'echarts-for-react';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 
 type GradeData = {
 	subject: string;
-	grade: number;
+	grade: string;
+	timestamp: string;
+};
+
+const parseDate = (dateString: string): Date => {
+	const [day, month, yearAndTime] = dateString.split('/');
+	const [year, time] = yearAndTime.split(', ');
+	const [hour, minute, second] = time.split(':');
+	return new Date(+year, +month - 1, +day, +hour, +minute, +second);
 };
 
 export default function GradeChart() {
 	const [grades, setGrades] = useState<GradeData[]>([]);
 	const [hasMounted, setHasMounted] = useState(false);
+	const [chartOptions, setChartOptions] = useState<any>(null);
 
 	useEffect(() => {
 		setHasMounted(true);
 
+		const userId = 1; // TODO replace when authorization is in place
 		const fetchGrades = async () => {
 			try {
-				const res = await fetch('http://127.0.0.1:8000/api/student-grades');
+				const res = await fetch(`http://127.0.0.1:8000/subject/grades/${userId}`);
 				const data = await res.json();
 				setGrades(data);
 			} catch (err) {
@@ -31,60 +41,52 @@ export default function GradeChart() {
 	useEffect(() => {
 		if (!grades.length) return;
 
-		const width = 500;
-		const height = 300;
+		const numericGrades = grades.map((d) => ({
+			...d,
+			grade: isNaN(parseFloat(d.grade)) ? 0 : parseFloat(d.grade),
+			timestamp: parseDate(d.timestamp),
+		}));
 
-		const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-		const chartWidth = width - margin.left - margin.right;
-		const chartHeight = height - margin.top - margin.bottom;
+		const validGrades = numericGrades.filter(
+			(d) => !isNaN(d.grade) && !isNaN(d.timestamp.getTime())
+		);
 
-		const svg = d3.select('#grade-chart')
-			.attr('width', width)
-			.attr('height', height)
-			.style('border', '1px solid black');
+		const subjects = Array.from(new Set(validGrades.map((d) => d.subject)));
 
-		const chart = svg.append('g')
-			.attr('transform', `translate(${margin.left}, ${margin.top})`);
+		const chartData = subjects.map((subject) => {
+			const subjectData = validGrades.filter((d) => d.subject === subject);
+			return {
+				name: subject,
+				type: 'line',
+				data: subjectData.map((d) => [d.timestamp.getTime(), d.grade]), // [timestamp, grade] pair
+			};
+		});
 
-		const x = d3.scaleBand()
-			.domain(grades.map(d => d.subject))
-			.range([0, chartWidth])
-			.padding(0.1);
+		const options = {
+			xAxis: {
+				type: 'time',
+				boundaryGap: false,
+				axisLabel: {
+					formatter: (value: any) => {
+						const date = new Date(value);
+						const month = date.toLocaleString('default', { month: 'short' }); // "Jan", "Feb", etc.
+						const year = date.getFullYear().toString().slice(-2); // Last two digits of the year
+						return `${month}/${year}`;
+					},
+				},
+			},
+			yAxis: {
+				type: 'value',
+				min: 0,
+				max: 6,
+			},
+			series: chartData,
+		};
 
-		const y = d3.scaleLinear()
-			.domain([0, d3.max(grades, d => d.grade) || 100])
-			.nice()
-			.range([chartHeight, 0]);
-
-		chart.selectAll('.bar')
-			.data(grades)
-			.enter()
-			.append('rect')
-			.attr('class', 'bar')
-			.attr('x', d => {
-				const xValue = x(d.subject);
-				return xValue !== undefined ? xValue : 0;
-			})
-			.attr('y', d => {
-				const yValue = y(d.grade);
-				return yValue !== undefined ? yValue : 0;
-			})
-			.attr('width', x.bandwidth())
-			.attr('height', d => chartHeight - y(d.grade))
-			.attr('fill', 'steelblue');
-
-		chart.append('g')
-			.attr('class', 'x-axis')
-			.attr('transform', `translate(0, ${chartHeight})`)
-			.call(d3.axisBottom(x));
-
-		chart.append('g')
-			.attr('class', 'y-axis')
-			.call(d3.axisLeft(y));
-
+		setChartOptions(options);
 	}, [grades]);
 
-	if (!hasMounted) return null;
+	if (!hasMounted || !chartOptions) return null;
 
 	return (
 		<Box
@@ -95,14 +97,20 @@ export default function GradeChart() {
 				boxSizing: 'border-box',
 			}}
 		>
-			<Card sx={{ width: '100%' }}>
+			<Card sx={{ width: '100%', borderTop: '1px solid black',
+				borderLeft: '1px solid black',
+				borderBottom: '5px solid black',
+				borderRight: '5px solid black' }}>
 				<CardContent>
 					<Typography variant="h6" gutterBottom>
-						Student's Grade Chart
+						Notenspiegel
 					</Typography>
 
 					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
-						<svg id="grade-chart"></svg>
+						<ReactECharts
+							option={chartOptions}
+							style={{ width: '100%', height: '400px' }}
+						/>
 					</Box>
 				</CardContent>
 			</Card>

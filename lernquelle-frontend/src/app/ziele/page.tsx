@@ -2,16 +2,16 @@
 import { useEffect, useState } from 'react';
 import {
 	Box,
-	Card,
-	CardContent,
 	Typography,
 } from '@mui/material';
 
 type Goal = {
+	goal_id: string;
 	description: string;
-	dueDate: string;
-	startDate: string;
-	evaluation: string;
+	due_date: string;
+	creation_date: string;
+	grading: string;
+	goal_type: string;
 };
 
 export default function Page() {
@@ -57,29 +57,30 @@ export default function Page() {
 
 			{goals.length > 0 ? (
 				goals.map((goal, index) => (
-					<Card
+					<Box
 						key={index}
-						variant="outlined"
 						sx={{
 							mb: 2,
 							p: 2,
 							backgroundColor: '#f9f9f9',
-							fontFamily: 'Silkscreen, sans-serif',
-							border: '2px solid black',
-							borderRadius: 0,
+							border: '1px solid #ccc',
+							borderRadius: '8px',
 						}}
 					>
-						<CardContent sx={{ p: 0 }}>
-							<Typography variant="body1">{goal.description}</Typography>
-							<Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-								Fälligkeitsdatum: {new Date(goal.dueDate).toLocaleDateString()}
-							</Typography>
-						</CardContent>
-					</Card>
+						<Typography variant="body1" gutterBottom>
+							{goal.description}
+						</Typography>
+						<Typography variant="body2" color="text.secondary">
+							Fälligkeitsdatum: {goal.due_date}
+						</Typography>
+						<Typography variant="body2" color="text.secondary">
+							Typ: {goal.goal_type}
+						</Typography>
+					</Box>
 				))
 			) : (
 				<Typography variant="body2" color="text.secondary">
-					Keine individuelle Ziele gefunden.
+					Keine Ziele gefunden.
 				</Typography>
 			)}
 		</Box>
