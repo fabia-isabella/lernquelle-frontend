@@ -17,7 +17,7 @@ export default function GradeChart() {
 
 		const fetchGrades = async () => {
 			try {
-				const res = await fetch('http://127.0.0.1:8000/api/student-grades');
+				const res = await fetch('http://127.0.0.1:8000/student-grades');
 				const data = await res.json();
 				setGrades(data);
 			} catch (err) {
@@ -98,7 +98,7 @@ export default function GradeChart() {
 			<Card sx={{ width: '100%' }}>
 				<CardContent>
 					<Typography variant="h6" gutterBottom>
-						Student's Grade Chart
+						Notenspiegel
 					</Typography>
 
 					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
